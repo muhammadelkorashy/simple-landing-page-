@@ -31,6 +31,19 @@ html {
 .border-y { border-top-width: 1px; border-bottom-width: 1px; }
 .border-white\/5 { border-color: rgba(255, 255, 255, 0.06); }
 
+/* ===== Scroll Progress Bar ===== */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #60a5fa);
+    z-index: 99999;
+    transition: width 0.1s ease-out;
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.8);
+}
+
 /* ===== Typography & Breathing Room Refinements ===== */
 html[lang="ar"] body {
     font-family: 'Cairo', sans-serif;
@@ -57,6 +70,21 @@ html[lang="ar"] p {
 }
 html[lang="en"] p {
     line-height: 1.85 !important;
+}
+
+/* ===== Animated Gradient Headline Text ===== */
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.gradient-text-animate {
+    background: linear-gradient(270deg, #60a5fa, #a78bfa, #3b82f6, #8b5cf6);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientFlow 6s ease infinite;
 }
 
 /* ===== Section Spacing & Headers ===== */
@@ -94,7 +122,7 @@ html[lang="en"] p {
     color: #d1d5db;
 }
 
-/* ===== Clean Badges & Pill Indicators (Zero Emojis) ===== */
+/* ===== Clean Badges & Pill Indicators ===== */
 .section-badge {
     display: inline-flex;
     align-items: center;
@@ -121,6 +149,10 @@ html[lang="en"] p {
     color: #c4b5fd;
     box-shadow: 0 4px 20px rgba(139, 92, 246, 0.12);
 }
+@keyframes dotPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.45); opacity: 0.65; }
+}
 .badge-dot {
     width: 8px;
     height: 8px;
@@ -128,6 +160,7 @@ html[lang="en"] p {
     background: currentColor;
     box-shadow: 0 0 10px currentColor;
     flex-shrink: 0;
+    animation: dotPulse 2.2s ease-in-out infinite;
 }
 
 /* ===== Ethics / Value Notice Box ===== */
@@ -146,6 +179,15 @@ html[lang="en"] p {
     align-items: center;
     gap: 0.9rem;
     max-width: 42rem;
+    transition: all 0.35s ease;
+}
+.ethics-box:hover {
+    border-color: rgba(139, 92, 246, 0.5);
+    background: rgba(139, 92, 246, 0.12);
+    transform: translateX(-4px);
+}
+html[lang="en"] .ethics-box:hover {
+    transform: translateX(4px);
 }
 .ethics-icon {
     width: 38px;
@@ -187,12 +229,15 @@ html[lang="en"] p {
     text-align: center;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
 }
 .stat-box:hover {
-    transform: translateY(-4px);
-    border-color: rgba(59, 130, 246, 0.4);
-    background: rgba(59, 130, 246, 0.06);
+    transform: translateY(-6px);
+    border-color: rgba(59, 130, 246, 0.45);
+    background: rgba(59, 130, 246, 0.08);
+    box-shadow: 0 16px 32px -10px rgba(59, 130, 246, 0.25);
 }
 .stat-value {
     font-size: 1.5rem;
@@ -219,9 +264,14 @@ html[lang="en"] p {
     max-width: 42rem;
     text-align: center;
     line-height: 1.6;
+    transition: all 0.35s ease;
+}
+.platforms-bar:hover {
+    border-color: rgba(59, 130, 246, 0.35);
+    background: rgba(59, 130, 246, 0.05);
 }
 
-/* ===== Cards & SVG Icon Containers ===== */
+/* ===== Cards & SVG Icon Containers with Shimmer Hover ===== */
 .feature-card {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -229,15 +279,32 @@ html[lang="en"] p {
     padding: 2.25rem 2rem;
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+.feature-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.7s ease;
+    pointer-events: none;
+}
+.feature-card:hover::before {
+    left: 140%;
 }
 .feature-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-10px);
     border-color: rgba(59, 130, 246, 0.45);
     background: rgba(59, 130, 246, 0.05);
-    box-shadow: 0 24px 48px -12px rgba(59, 130, 246, 0.16);
+    box-shadow: 0 26px 50px -12px rgba(59, 130, 246, 0.2);
 }
 .feature-card h3 {
     margin-bottom: 0.9rem;
@@ -254,10 +321,11 @@ html[lang="en"] p {
     color: #60a5fa;
     margin-bottom: 1.5rem;
     flex-shrink: 0;
-    transition: transform 0.35s ease;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .feature-card:hover .feature-icon {
-    transform: scale(1.08);
+    transform: scale(1.12) rotate(-4deg);
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
 }
 .feature-icon svg {
     width: 26px;
@@ -280,6 +348,12 @@ html[lang="en"] p {
     color: #60a5fa;
     margin-bottom: 1.4rem;
     flex-shrink: 0;
+    transition: all 0.35s ease;
+}
+.feature-card:hover .step-badge {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: #ffffff;
 }
 
 /* ===== Case Study Metric Pills ===== */
@@ -288,12 +362,13 @@ html[lang="en"] p {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 24px;
     padding: 1.75rem 1.5rem;
-    transition: all 0.35s ease;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .case-step-card:hover {
-    border-color: rgba(59, 130, 246, 0.4);
-    transform: translateY(-5px);
-    background: rgba(59, 130, 246, 0.04);
+    border-color: rgba(59, 130, 246, 0.45);
+    transform: translateY(-6px);
+    background: rgba(59, 130, 246, 0.05);
+    box-shadow: 0 18px 36px -12px rgba(59, 130, 246, 0.2);
 }
 .case-step-num {
     font-size: 2.25rem;
@@ -328,22 +403,23 @@ html[lang="en"] p {
     background: rgba(59, 130, 246, 0.1);
     border: 1px solid rgba(59, 130, 246, 0.25);
     border-radius: 18px;
-    padding: 1.1rem 1rem;
+    padding: 1.15rem 1rem;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
-    transition: all 0.3s ease;
+    transition: all 0.35s ease;
 }
 .case-metric-pill:hover {
-    border-color: rgba(59, 130, 246, 0.5);
-    background: rgba(59, 130, 246, 0.16);
-    transform: translateY(-3px);
+    border-color: rgba(59, 130, 246, 0.55);
+    background: rgba(59, 130, 246, 0.18);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 14px 28px -10px rgba(59, 130, 246, 0.3);
 }
 .case-metric-pill strong {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     font-weight: 900;
     color: #60a5fa;
     line-height: 1.3;
@@ -367,13 +443,13 @@ html[lang="en"] p {
     background: rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .market-card:hover {
-    border-color: rgba(139, 92, 246, 0.45);
-    background: rgba(139, 92, 246, 0.06);
-    transform: translateY(-8px);
-    box-shadow: 0 22px 45px -12px rgba(139, 92, 246, 0.2);
+    border-color: rgba(139, 92, 246, 0.5);
+    background: rgba(139, 92, 246, 0.07);
+    transform: translateY(-10px);
+    box-shadow: 0 24px 48px -12px rgba(139, 92, 246, 0.25);
 }
 .market-flag {
     width: 96px;
@@ -384,6 +460,10 @@ html[lang="en"] p {
     border: 2px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     margin-bottom: 0.25rem;
+    transition: transform 0.4s ease;
+}
+.market-card:hover .market-flag {
+    transform: scale(1.08);
 }
 .market-card h3 {
     font-size: 1.35rem;
@@ -404,13 +484,13 @@ html[lang="en"] p {
     text-align: center;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .sector-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(139, 92, 246, 0.45);
-    background: rgba(139, 92, 246, 0.07);
-    box-shadow: 0 18px 36px -10px rgba(139, 92, 246, 0.18);
+    transform: translateY(-7px) scale(1.02);
+    border-color: rgba(139, 92, 246, 0.5);
+    background: rgba(139, 92, 246, 0.08);
+    box-shadow: 0 18px 36px -10px rgba(139, 92, 246, 0.22);
 }
 
 /* ===== Results Slider Tag ===== */
@@ -444,8 +524,8 @@ html[lang="en"] p {
     transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .cta-btn-primary:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 22px 40px -8px rgba(59, 130, 246, 0.55);
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 22px 44px -8px rgba(59, 130, 246, 0.6);
 }
 .cta-btn-primary svg {
     width: 20px;
@@ -469,8 +549,8 @@ html[lang="en"] p {
 }
 .cta-btn-secondary:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.25);
-    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.28);
+    transform: translateY(-3px);
 }
 
 .whatsapp-float {
@@ -514,13 +594,13 @@ html[lang="en"] p {
     }
 }
 
-/* ===== Motion & Animations ===== */
+/* ===== Rich Motion & Animations ===== */
 @keyframes pulseGlow {
     0%, 100% {
         box-shadow: 0 12px 28px -6px rgba(59, 130, 246, 0.45), 0 0 0 0 rgba(59, 130, 246, 0.45);
     }
     50% {
-        box-shadow: 0 16px 34px -6px rgba(59, 130, 246, 0.55), 0 0 0 12px rgba(59, 130, 246, 0);
+        box-shadow: 0 16px 34px -6px rgba(59, 130, 246, 0.55), 0 0 0 14px rgba(59, 130, 246, 0);
     }
 }
 .pulse-cta {
@@ -532,37 +612,54 @@ html[lang="en"] p {
         transform: translateY(0px);
     }
     50% {
-        transform: translateY(-10px);
+        transform: translateY(-12px);
     }
 }
 .float-card {
-    animation: floatSlow 6s ease-in-out infinite;
+    animation: floatSlow 5.5s ease-in-out infinite;
 }
 
 @keyframes orbBreathe {
     0%, 100% {
         transform: scale(1) translate(0, 0);
-        opacity: 0.7;
+        opacity: 0.65;
     }
     50% {
-        transform: scale(1.12) translate(12px, -12px);
+        transform: scale(1.16) translate(16px, -16px);
         opacity: 1;
     }
 }
 .ambient-orb {
-    animation: orbBreathe 9s ease-in-out infinite;
+    animation: orbBreathe 8s ease-in-out infinite;
 }
 
-/* Scroll Reveal Motion */
-.reveal {
+/* Scroll Reveal Variations */
+.reveal,
+.reveal-scale,
+.reveal-right,
+.reveal-left {
     opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1), transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: opacity, transform;
 }
-.reveal.is-visible {
+.reveal {
+    transform: translateY(38px);
+}
+.reveal-scale {
+    transform: scale(0.92) translateY(24px);
+}
+.reveal-right {
+    transform: translateX(42px);
+}
+.reveal-left {
+    transform: translateX(-42px);
+}
+.reveal.is-visible,
+.reveal-scale.is-visible,
+.reveal-right.is-visible,
+.reveal-left.is-visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(0, 0) scale(1);
 }
 .delay-1 { transition-delay: 0.1s; }
 .delay-2 { transition-delay: 0.2s; }
@@ -570,12 +667,12 @@ html[lang="en"] p {
 .delay-4 { transition-delay: 0.4s; }
 
 @media (prefers-reduced-motion: reduce) {
-    .reveal {
+    .reveal, .reveal-scale, .reveal-right, .reveal-left {
         opacity: 1 !important;
         transform: none !important;
         transition: none !important;
     }
-    .float-card, .ambient-orb, .pulse-cta {
+    .float-card, .ambient-orb, .pulse-cta, .gradient-text-animate, .badge-dot {
         animation: none !important;
     }
 }
